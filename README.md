@@ -1,4 +1,4 @@
-https://adventofcode.com/2020
+https://adventofcode.com/
 
 Hi! I'm Eric Wastl. I make Advent of Code. I hope you like it! I also made Vanilla JS, PHP Sadness, and lots of other things. You can find me on Twitter and GitHub.
 
