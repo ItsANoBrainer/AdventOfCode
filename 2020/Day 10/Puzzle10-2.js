@@ -101,26 +101,27 @@ inputArray.push(inputArray[inputArray.length] + 3)
 var numArray = []
 var totalOptions = 1
 
+// Using Dynamic Programming, we can easily calculate the number of possiblities, without needing to calculate EACH possibility.
 for (var i = 0; i < inputArray.length - 1; i++) {
     const currentNum = inputArray[i]
     const numMinus1 = currentNum - 1
     const numMinus2 = currentNum - 2
     const numMinus3 = currentNum - 3
-    
-    // console.log(`==========\nCurrentNum: ${currentNum}`)
-    // console.log(`-1:${hasMinus1} -2:${hasMinus2} -3:${hasMinus3}`)
+
+    // Check if theres more than 1 way to get to the currentNumber
     if (inputArray.includes(numMinus1) + inputArray.includes(numMinus2) + inputArray.includes(numMinus3) > 1) {
         const numMinus1Options = (numArray[numMinus1] != undefined ? numArray[numMinus1] : 0)
         const numMinus2Options = (numArray[numMinus2] != undefined ? numArray[numMinus2] : 0)
         const numMinus3Options = (numArray[numMinus3] != undefined ? numArray[numMinus3] : 0)
 
-        // console.log(`-1:${numMinus1Options} -2:${numMinus2Options} -3:${numMinus3Options} | Setting total options to ${numMinus1Options + numMinus2Options + numMinus3Options}`)
+        //Set totaloptions equal to the sum of each numMinus options 
         totalOptions = numMinus1Options + numMinus2Options + numMinus3Options
-
     }
+    // Set the currentnumbers index in the numArray to the number of totaloptions. 
+    // If there was only 1 way to get to currentNumber, total options never changes.
+    // Because of this we can just set it to the current number of totaloptions
     numArray[currentNum] = totalOptions
 
 }
 
-// console.log(numArray)
 console.log(`Total Possible Options: ${totalOptions}`)
