@@ -1,0 +1,101 @@
+/* https://adventofcode.com/2019/day/6
+
+*/
+
+const input = `K)L
+E)F
+G)H
+J)K
+B)G
+D)E
+E)J
+D)I
+C)D
+B)C
+COM)B`
+
+const inputArray = input.split('\n')
+
+console.log('Total Orbits:', calculate(inputArray))
+
+function createOrbitMaps(array) {
+    let orbitMap = []
+    array.forEach(function(instruction) {
+        const splitInstruction = instruction.split(')') // X5D)T9T
+        const orbitee = splitInstruction[0] // X5D
+        const orbiter = splitInstruction[1] // T9T
+
+        let foundPlanet = false
+        orbitMap.forEach((orbit, orbitMapIndex) => {
+            if(orbit.includes(orbitee)) {
+                foundPlanet = true
+                const indexOf = orbit.indexOf(orbitee)
+                if(indexOf == orbit.length-1) {
+                    orbitMap[orbitMapIndex].push(orbiter)
+                } else if (indexOf != -1) {
+                    let orbitCopy = orbit.slice(0, indexOf+1)
+                    orbitCopy.push(orbiter)
+                    orbitMap.push(orbitCopy)
+                }
+            // } else if (orbit.includes(orbiter)) {
+            //     foundPlanet = true
+            //     const indexOf = orbit.indexOf(orbiter)
+            //     if(indexOf == 0) {
+            //         orbitMap[orbitMapIndex].unshift(orbitee)
+            //     }
+            }
+        })
+
+        if(!foundPlanet) {
+            orbitMap.push([orbitee, orbiter])
+        }
+
+        orbitMap.forEach((orbit1, orbit1MapIndex) => {
+            orbitMap.forEach((orbit2, orbit2MapIndex) => {
+                const orbit1First = orbit1[0]
+                const orbit1Last = orbit1[orbit1.length-1]
+
+                const orbit2First = orbit2[0]
+                const orbit2Last = orbit2[orbit2.length-1]
+
+                if(orbit1First == orbit2Last) {
+                    const orbit2Copy = orbit2
+                    orbit2Copy.pop()
+                    orbitMap[orbit1MapIndex] = orbit2Copy.concat(orbitMap[orbit1MapIndex])
+                    orbitMap.splice(orbit2MapIndex, 1)
+                } else if (orbit1Last == orbit2First) {
+                    const orbit1Copy = orbit1
+                    orbit1Copy.pop()
+                    orbitMap[orbit2MapIndex] = orbit1Copy.concat(orbitMap[orbit2MapIndex])
+                    orbitMap.splice(orbit1MapIndex, 1)
+                }
+            })
+        })
+    })
+    return orbitMap
+}
+
+function getTotalOrbits(orbitMaps) {
+    let calculatedOrbits = []
+    let totalOrbits = 0
+    orbitMaps.forEach(function(orbitMap) {
+        let currentOrbit = ''
+        orbitMap.forEach(function(planet, index) {
+            if(index!=0) {
+                currentOrbit+=(planet+',')
+                if(!calculatedOrbits.includes(currentOrbit)) {
+                    calculatedOrbits.push(currentOrbit)
+                    totalOrbits+=(currentOrbit.split(',').length-1)
+                }
+            }
+        })
+    })
+    return totalOrbits
+}
+
+function calculate(array) {
+    const orbitMaps = createOrbitMaps(array)
+    const totalOrbits = getTotalOrbits(orbitMaps)
+    
+    return totalOrbits
+}
